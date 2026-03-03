@@ -1,0 +1,253 @@
+@reference "tailwindcss";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Design Tokens ─────────────────────────────────────── */
+@layer base {
+  :root {
+    --color-primary: rgba(136, 219, 72, 0.758)ef;
+    --color-primary-hover: #571e04bf;
+    --color-primary-light: #87b74c;
+    /* green-100 */
+
+    --color-danger: rgba(198, 86, 31, 0.71);
+    --color-warning: rgba(121, 189, 133, 0.71);
+    --color-success: #9a6435;
+
+    --color-bg: #ffffff;
+    --color-bg-muted: #f9fafb;
+    --color-bg-subtle: #f3f4f6;
+
+    --color-text: #111827;
+    --color-text-muted: #6b7280;
+    --color-text-subtle: #9ca3af;
+
+    --color-border: rgb(138, 140, 139);
+    --color-border-strong: rgba(221, 218, 216, 0.71);
+
+    --radius-sm: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  }
+
+}
+
+/* ─── Base Resets ───────────────────────────────────────── */
+@layer base {
+  * {
+    box-sizing: border-box;
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans, system-ui, sans-serif);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--color-text);
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+  }
+
+  h4 {
+    font-size: 1.125rem;
+  }
+
+  a {
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+}
+
+/* ─── Component Classes ─────────────────────────────────── */
+@layer components {
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2;
+    @apply font-medium rounded-md transition-colors duration-150;
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background-color: var(--color-primary-hover);
+  }
+
+  .btn-outline {
+    background-color: transparent;
+    color: var(--color-text);
+    border: 1px solid var(--color-border-strong);
+  }
+
+  .btn-outline:hover:not(:disabled) {
+    background-color: var(--color-bg-subtle);
+  }
+
+  .btn-ghost {
+    background-color: transparent;
+    color: white;
+  }
+
+  .btn-ghost:hover:not(:disabled) {
+    background-color: var(--color-primary-hover);
+    color: white;
+  }
+
+  .btn-danger {
+    background-color: var(--color-danger);
+    color: white;
+  }
+
+  .btn-danger:hover:not(:disabled) {
+    filter: brightness(0.9);
+  }
+
+  .btn-sm {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+
+  .btn-lg {
+    padding: 0.625rem 1.25rem;
+    font-size: 1rem;
+  }
+
+  /* Form Inputs */
+  .input {
+    @apply w-full rounded-md border px-3 py-2 text-sm;
+    @apply transition-colors duration-150;
+    @apply focus:outline-none focus:ring-2;
+    border-color: var(--color-border-strong);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    focus-ring-color: var(--color-primary);
+  }
+
+  .input::placeholder {
+    color: var(--color-text-subtle);
+  }
+
+  .input:disabled {
+    background-color: var(--color-bg-subtle);
+    cursor: not-allowed;
+  }
+
+  .input-error {
+    border-color: var(--color-danger);
+  }
+
+  .label {
+    @apply block text-sm font-medium mb-1;
+    color: var(--color-text);
+  }
+
+  .field-error {
+    @apply text-xs mt-1;
+    color: var(--color-danger);
+  }
+
+  /* Cards */
+  .card {
+    @apply rounded-lg border p-6;
+    background-color: var(--color-bg);
+    border-color: var(--color-border);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .card-muted {
+    background-color: var(--color-bg-muted);
+  }
+
+  /* Badges */
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+
+  .badge-green {
+    background-color: var(--color-primary-light);
+    color: var(--color-primary);
+  }
+
+  .badge-gray {
+    background-color: var(--color-bg-subtle);
+    color: var(--color-text-muted);
+  }
+
+  .badge-red {
+    background-color: #fee2e2;
+    color: var(--color-danger);
+  }
+
+  /* Containers */
+  .container-page {
+    @apply mx-auto w-full max-w-5xl px-4 py-8;
+  }
+
+  .container-narrow {
+    @apply mx-auto w-full max-w-md px-4 py-8;
+  }
+
+  /* Page heading */
+  .page-title {
+    @apply text-2xl font-bold mb-1;
+    background: linear-gradient(90deg,
+        var(--color-primary) 0%,
+        var(--color-warning) 25%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+
+
+  .page-subtitle {
+    @apply text-sm mb-6;
+    color: var(--color-text-muted);
+  }
+
+  /* Divider */
+  .divider {
+    @apply border-t my-6;
+    border-color: var(--color-border);
+  }
+}
