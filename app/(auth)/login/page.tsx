@@ -2,7 +2,7 @@
 
 import { useActionState } from 'react'
 import { login, LoginState } from './action'
-
+import Image from 'next/image'
 const initialState: LoginState = {}
 
 export default function LoginPage() {
@@ -11,7 +11,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="bg-white rounded-xl shadow p-8 w-full max-w-md">
-<Image src="/nobglogo1" alt="greensteps" height={50} width={50}/>
+        <Image src="/nobglogo1.png" alt="greensteps" height={50} width={50} />
         <h1 className="text-2xl font-bold mb-6 text-gray-800">Sign In</h1>
 
         <form action={formAction} className="space-y-4">
