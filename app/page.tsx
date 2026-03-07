@@ -17,11 +17,11 @@ export default function Home() {
   }, [])
 
   return (
-    <div>
+    <div >
       <Navbar />
 
       {/* Hero section */}
-      <section className="hero-section">
+      <section className="w-full hero-root hero-section">
 
         <h1 className="hero-title">
           Every step you take<br />
@@ -30,7 +30,7 @@ export default function Home() {
 
         <p className="hero-subtitle">
           Complete eco-conscious tasks, earn rewards, and join a community of
-          changemakers making a real difference — one green step at a time.
+          changemakers making a real difference.
         </p>
 
 
@@ -40,23 +40,11 @@ export default function Home() {
             className="hero-btn-primary"
             onClick={() => router.push('/register')}
           >
-            Start Your Journey →
+            Start Your Journey
           </button>
   
         </div>
 
-        {/* Social proof */}
-        <div className="hero-social-proof">
-          <div className="hero-avatar-stack">
-            <div className="hero-avatar hero-avatar-1">A</div>
-            <div className="hero-avatar hero-avatar-2">B</div>
-            <div className="hero-avatar hero-avatar-3">C</div>
-            <div className="hero-avatar hero-avatar-4">D</div>
-          </div>
-          <p className="hero-proof-text">
-            Join <strong>2,400+</strong> eco-warriors already making a difference
-          </p>
-        </div>
       </section>
     </div>
   )

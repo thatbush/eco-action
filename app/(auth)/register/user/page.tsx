@@ -52,23 +52,40 @@ export default function UserRegisterPage() {
       return
     }
 
-    if (data.session) {
-      router.push('/profile')
-      return
-    }
+   if (data.session && data.user) {
+  const res = await fetch('/api/register-user', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      userId: data.user.id,
+      display_name,
+    }),
+  })
 
-    router.push('/register/user/verify-email')
+  if (!res.ok) {
+    const err = await res.json()
+    setErrors({ general: err.error ?? 'Registration failed. Please try again.' })
+    setPending(false)
+    return
+  }
+
+  router.push('/profile')
+  return
+}
   }
 
   return (
-    <div className="hero-section">
+    <div className="hero-root w-full hero-section">
       <div>
-        <div className="flex">
-          <h1 className="hero-title" style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)', marginBottom: '8px' }}>Create your account</h1>
+        <div>
+          <h1 className="hero-title" style={{ fontSize: 'clamp(1.6rem, 3vw, 3.0rem)', marginBottom: '6px' }}>Create your account</h1>
         </div>
-        <p className="hero-subtitle mt-1">
+        <h1 className="hero-title" style={{ fontSize: 'clamp(1.2rem, 3vw, 2.1rem)', marginBottom: '6px' }}>
+          build your streak <em> and make an impact</em>
+        </h1>
+        <p className="hero-subtitle">
           Already have an account?{' '}
-          <Link href="/login" className="text-brown-600 hover:underline">
+          <Link href="/login" style={{ color: 'var(--hero-green-mid)', fontWeight: 600 }}>
             Sign in
           </Link>
         </p>

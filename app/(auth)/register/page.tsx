@@ -24,14 +24,16 @@ export default function RegisterPage() {
             <button className="btn-ghost" onClick={() => router.push('/register/user')}>
               <div className="hero-subtitle" style={{ marginBottom: '8px' }}>Individual</div>
               <p >
-                Complete eco tasks, earn points, and redeem rewards on your personal journey.
+                Complete simple tasks that build habits to care
+              </p>
+              <p > and sustain the environment, earn points, and redeem rewards.
               </p>
               <div className="register-choice-cta">Get started</div>
             </button>
             <button className="btn-ghost" onClick={() => router.push('/register/organization')}>
               <div className="hero-subtitle" style={{ marginBottom: '8px' }}>Organization</div>
               <p style={{ marginBottom: '16px' }}>
-                Post tasks, run challenges, and engage your community at scale.
+                Post tasks, reward  and engage your community.
               </p>
               <div className="register-choice-cta">Get started</div>
             </button>
@@ -42,7 +44,7 @@ export default function RegisterPage() {
 
         <p className="hero-proof-text" style={{ marginTop: '32px', textAlign: 'center' }}>
           Already have an account?{' '}
-          <Link href="/login" style={{ color: 'var(--hero-green-mid)', fontWeight: 500 }}>
+          <Link href="/login" style={{ color: 'var(--hero-green-mid)', fontWeight: 900 }}>
             Sign in
           </Link>
         </p>

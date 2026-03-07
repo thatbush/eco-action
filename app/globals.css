@@ -366,14 +366,22 @@
 
   /* Step cards - flat row layout */
   .hero-steps-row {
-    display: flex;
-    gap: 24px;
-    justify-content: center;
-    flex-wrap: wrap;
-    width: min(900px, 90vw);
-    margin: 0 auto 40px;
-    animation: heroFadeUp 0.8s 0.45s ease both;
+  display: grid;
+  grid-template-columns: 3 fr; 
+  gap: 12px;
+  width: min(900px, 90vw);
+  margin: 0 auto 40px;
+  animation: heroFadeUp 0.8s 0.45s ease both;
+
+  
+}
+
+@media (min-width: 640px) {
+  .hero-steps-row {
+    grid-template-columns: repeat(2, 1fr); /* 2 per row on larger screens */
   }
+}
+
 
   .hero-step-card-flat {
     background: rgba(255, 255, 255, 0.92);
@@ -579,7 +587,8 @@
   /* ─── Hero Responsive ─── */
   @media (max-width: 768px) {
     .hero-header {
-      padding: 16px 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(82, 183, 136, 0.1);
     }
 
     .hero-steps-row {

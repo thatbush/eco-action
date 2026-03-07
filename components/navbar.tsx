@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 export const Navbar: React.FC = () => {
     const router = useRouter();
     return (
-        <nav >
+        <nav className="w-full pb-16">
             <header className="hero-header">
                 
                 <div className="flex items-center hero-logo hover:cursor-pointer">
