@@ -4,6 +4,15 @@ const nextConfig: NextConfig = {
   experimental: {
     preloadEntriesOnStart: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'sjglknwoqeaznwkyttgm.supabase.co',
+        pathname: '/storage/v1/object/**',
+      },
+    ],
+  },
 };
 
 export default nextConfig;
