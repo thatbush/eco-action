@@ -40,7 +40,7 @@ export function WalletCard({ userId }: WalletCardProps) {
   )
 
   return (
-    <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm space-y-5">
+    <div className=" p-6 space-y-5">
 
       {/* Tier badge */}
       <div className="flex items-center justify-between">
@@ -60,7 +60,7 @@ export function WalletCard({ userId }: WalletCardProps) {
 
       {/* Current points */}
       <div>
-        <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+        <p className="profile-member-since mb-1 text-gray-500">
           Available Points
         </p>
         <div className="flex items-end gap-2">
@@ -74,7 +74,7 @@ export function WalletCard({ userId }: WalletCardProps) {
       {/* Lifetime points + tier progress */}
       <div className="space-y-2">
         <div className="flex items-center justify-between text-xs text-gray-500">
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 mb-1">
             <TrendingUp className="w-3 h-3" />
             <span>{wallet.lifetime_points.toLocaleString()} lifetime pts</span>
           </div>

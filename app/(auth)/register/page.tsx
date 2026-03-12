@@ -2,13 +2,15 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { Navbar } from '@/components/navbar'
 
 export default function RegisterPage() {
   const router = useRouter()
 
   return (
     <div>
-      <section className="hero-section">
+      <Navbar/>
+      <section className="w-full hero-root hero-section">
 
         <h1 className="hero-title" style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)', marginBottom: '8px' }}>
           How will you <em>make an impact?</em>
@@ -21,21 +23,21 @@ export default function RegisterPage() {
         {/* Choice cards */}
         <div >
           <div className="flex gap-4">
-            <button className="btn-ghost" onClick={() => router.push('/register/user')}>
+            <button className="btn-primary" onClick={() => router.push('/register/user')}>
               <div className="hero-subtitle" style={{ marginBottom: '8px' }}>Individual</div>
               <p >
                 Complete simple tasks that build habits to care
               </p>
               <p > and sustain the environment, earn points, and redeem rewards.
               </p>
-              <div className="register-choice-cta">Get started</div>
+              <p>Get started</p>
             </button>
             <button className="btn-ghost" onClick={() => router.push('/register/organization')}>
               <div className="hero-subtitle" style={{ marginBottom: '8px' }}>Organization</div>
               <p style={{ marginBottom: '16px' }}>
                 Post tasks, reward  and engage your community.
               </p>
-              <div className="register-choice-cta">Get started</div>
+              <p >Get started</p>
             </button>
           </div>
 

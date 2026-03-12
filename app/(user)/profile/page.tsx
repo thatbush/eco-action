@@ -1,8 +1,10 @@
+
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { WalletCard } from '@/components/wallet/wallet-card'
+import { BadgeList } from '@/components/badges/badges-list'
 
 export default async function ProfilePage() {
   const supabase = await createClient()
@@ -25,138 +27,183 @@ export default async function ProfilePage() {
     .eq('id', user.id)
     .single()
 
-  // Fetch task submission progress
+
+  // Fetch earned badges
+  const { data: earnedBadges } = await adminClient
+    .from('user_milestones')
+    .select(`
+      milestone_key, achieved_at,
+      badges!inner (name, description, icon)
+    `)
+    .eq('user_id', user.id)
+    .order('achieved_at', { ascending: true })
+
+  const badges = (earnedBadges ?? []).map(b => ({
+    milestone_key: b.milestone_key,
+    achieved_at: b.achieved_at,
+    name: (b.badges as any).name,
+    description: (b.badges as any).description,
+    icon: (b.badges as any).icon,
+  }))  
+
   const { data: submissions } = await adminClient
     .from('task_submissions')
     .select('status')
     .eq('user_id', user.id)
 
-  const totalSubmissions  = submissions?.length ?? 0
-  const approvedCount     = submissions?.filter(s => s.status === 'approved').length ?? 0
-  const pendingCount      = submissions?.filter(s => s.status === 'pending').length ?? 0
-  const rejectedCount     = submissions?.filter(s => s.status === 'rejected').length ?? 0
+  const totalSubmissions = submissions?.length ?? 0
+  const approvedCount = submissions?.filter(s => s.status === 'approved').length ?? 0
+  const pendingCount = submissions?.filter(s => s.status === 'pending').length ?? 0
+  const rejectedCount = submissions?.filter(s => s.status === 'rejected').length ?? 0
 
   const memberSince = profile?.created_at
     ? new Date(profile.created_at).toLocaleDateString('en-KE', {
-        month: 'long', year: 'numeric',
-      })
+      month: 'long', year: 'numeric',
+    })
     : '—'
 
-  const tierLabels: Record<number, { label: string; color: string; icon: string }> = {
-    1: { label: 'Seedling',  color: 'bg-green-100 text-green-700',     icon: '🌱' },
-    2: { label: 'Sprout',    color: 'bg-lime-100 text-lime-700',       icon: '🌿' },
-    3: { label: 'Guardian',  color: 'bg-yellow-100 text-yellow-700',   icon: '🌳' },
-    4: { label: 'Champion',  color: 'bg-orange-100 text-orange-700',   icon: '🌍' },
-    5: { label: 'EcoLegend', color: 'bg-emerald-100 text-emerald-700', icon: '🏆' },
+  const tierLabels: Record<number, { label: string; color: string; bg: string; icon: string; moto: string }> = {
+    1: { label: 'Seedling', color: 'text-green-700', bg: 'bg-green-50 border-green-200', icon: '🌱', moto: 'Start small, grow strong.' },
+    2: { label: 'Sprout', color: 'text-lime-700', bg: 'bg-lime-50 border-lime-200', icon: '🌿', moto: 'Keep pushing, you\'re thriving!' },
+    3: { label: 'Guardian', color: 'text-yellow-700', bg: 'bg-yellow-50 border-yellow-200', icon: '🛡️', moto: 'Protect the planet, one task at a time.' },
+    4: { label: 'Champion', color: 'text-orange-700', bg: 'bg-orange-50 border-orange-200', icon: '🏆', moto: 'Lead the change, inspire others.' },
+    5: { label: 'EcoLegend', color: 'text-emerald-700', bg: 'bg-emerald-50 border-emerald-200', icon: '🌍', moto: 'Inspire others to make a difference.' },
   }
 
   const tier = tierLabels[userRow?.tier_id ?? 1]
+  const initial = profile?.display_name?.[0]?.toUpperCase() ?? '?'
+  const completionPct = totalSubmissions > 0 ? Math.round((approvedCount / totalSubmissions) * 100) : 0
 
   return (
-    <div className="hero-section space-y-6">
+    <div>
+      <div className="profile-streak-row mb-5">
 
-      {/* Header */}
-      <div>
-        <div className="hero-title">
-          {profile?.display_name?.[0]?.toUpperCase() ?? '?'}
-        </div>
-        <h1
-          className="hero-title"
-          style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)', marginBottom: '8px' }}
-        >
-          {profile?.display_name ?? 'User'}
-        </h1>
-        <span className={`inline-block text-xs font-medium px-3 py-1 rounded-full ${tier.color}`}>
-          {tier.icon} {tier.label}
-        </span>
-        <p className="hero-subtitle">Member since {memberSince}</p>
-      </div>
+        {/* ── Hero Header ── */}
+        <div >
+          <div aria-hidden="true" />
 
-      {/* Wallet card — real-time */}
-      <WalletCard userId={user.id} />
-
-      {/* Streak cards */}
-      <div className="hero-steps-row">
-        <div className="hero-step-card-flat active">
-          <p className="hero-step-number text-3xl font-bold text-orange-500">
-            🔥 {userRow?.current_streak ?? 0}
-          </p>
-          <p className="text-sm text-gray-500 mt-1">Current Streak</p>
-        </div>
-        <div className="hero-step-card-flat active">
-          <p className="hero-step-number text-3xl font-bold text-orange-400">
-            ⚡ {userRow?.longest_streak ?? 0}
-          </p>
-          <p className="text-sm text-gray-500 mt-1">Longest Streak</p>
-        </div>
-      </div>
-
-      {/* Task progress */}
-      {totalSubmissions > 0 && (
-        <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm space-y-4">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
-            Task Progress
-          </h2>
-
-          {/* Progress bar */}
-          <div>
-            <div className="flex justify-between text-xs text-gray-400 mb-1.5">
-              <span>{approvedCount} completed</span>
-              <span>{totalSubmissions} total submitted</span>
+          {/* Avatar */}
+          <div className="profile-avatar-ring">
+            <div className="profile-avatar">
+              {initial}
             </div>
-            <div className="h-2.5 w-full bg-gray-100 rounded-full overflow-hidden">
+          </div>
+
+          {/* Name & tier */}
+          <h1 className="profile-name">
+            {profile?.display_name ?? 'User'}
+          </h1>
+
+          <div className={`profile-tier-badge ${tier.bg} ${tier.color}`}>
+            <span>{tier.label}</span>
+          </div>
+
+          <p className="profile-tier-moto">{tier.moto}</p>
+
+          <p className="profile-member-since">
+            <span className="profile-member-dot" />
+            Member since {memberSince}
+          </p>
+        </div>
+        {/* Wallet */}
+        <WalletCard userId={user.id} />
+        {/* Badges */}
+      <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
+        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">
+          Badges Earned ({badges.length})
+        </h2>
+        <BadgeList userId={user.id} initialBadges={badges} />
+      </div>
+
+         {/* Streaks */}
+        <div className="profile-streak-row" style={{ transform: 'translate(100px, -40px)' }}>
+          <div className="profile-streak-card">
+            <p className="profile-streak-value">{userRow?.current_streak ?? 0}</p>
+            <p className="profile-streak-label">Current Streak</p>
+          </div>
+          <div className="profile-streak-card">
+            <p className="profile-streak-value">{userRow?.longest_streak ?? 0}</p>
+            <p className="profile-streak-label">Best Streak</p>
+          </div>
+        </div>
+
+      </div>
+
+      {/* ── Content Stack ── */}
+      <div className="profile-streak-row">
+
+        {/* Task Progress */}
+        {totalSubmissions > 0 && (
+          <div className="profile-card">
+            <div className="profile-card-header">
+              <h2 className="profile-card-title">Task Progress</h2>
+              <span className="profile-card-pct">{completionPct}%</span>
+            </div>
+
+            {/* Bar */}
+            <div className="profile-progress-track">
               <div
-                className="h-full bg-green-500 rounded-full transition-all duration-500"
-                style={{
-                  width: `${totalSubmissions > 0
-                    ? (approvedCount / totalSubmissions) * 100
-                    : 0}%`
-                }}
+                className="profile-progress-fill"
+                style={{ width: `${completionPct}%` }}
               />
             </div>
-          </div>
+            <div className="profile-progress-meta">
+              <span>{approvedCount} completed</span>
+              <span>{totalSubmissions} submitted</span>
+            </div>
 
-          {/* Status breakdown */}
-          <div className="grid grid-cols-3 gap-2">
-            <div className="text-center p-2 rounded-xl bg-green-50">
-              <p className="text-lg font-bold text-green-600">{approvedCount}</p>
-              <p className="text-xs text-gray-400 mt-0.5">Approved</p>
-            </div>
-            <div className="text-center p-2 rounded-xl bg-yellow-50">
-              <p className="text-lg font-bold text-yellow-500">{pendingCount}</p>
-              <p className="text-xs text-gray-400 mt-0.5">Pending</p>
-            </div>
-            <div className="text-center p-2 rounded-xl bg-red-50">
-              <p className="text-lg font-bold text-red-400">{rejectedCount}</p>
-              <p className="text-xs text-gray-400 mt-0.5">Rejected</p>
+            {/* Breakdown */}
+            <div className="profile-status-grid">
+              <div className="profile-status-chip approved">
+                <p className="profile-status-num">{approvedCount}</p>
+                <p className="profile-status-lbl">Approved</p>
+              </div>
+              <div className="profile-status-chip pending">
+                <p className="profile-status-num">{pendingCount}</p>
+                <p className="profile-status-lbl">Pending</p>
+              </div>
+              <div className="profile-status-chip rejected">
+                <p className="profile-status-num">{rejectedCount}</p>
+                <p className="profile-status-lbl">Rejected</p>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Action buttons */}
-      <div className="space-y-3">
-        <Link
-          href="/usertasks"
-          className="flex items-center justify-between w-full px-5 py-4
-                     rounded-2xl bg-green-600 text-white font-semibold
-                     hover:bg-green-700 transition-colors shadow-sm"
-        >
-          <div className="flex items-center gap-3">
-            <span className="text-xl">🌍</span>
-            <div className="text-left">
-              <p className="font-semibold">Explore Tasks</p>
-              <p className="text-xs text-green-200 font-normal">
-                Find eco tasks near you
-              </p>
-            </div>
+        {/* CTA */}
+        <Link href="/usertasks" className="flex items-center justify-between w-full px-5 py-4
+             rounded-2xl bg-white border border-gray-100 text-gray-900
+             font-semibold hover:border-green-300 hover:bg-green-50
+             transition-colors shadow-sm">
+          <div className="profile-cta-text">
+            <span className="profile-cta-main">Explore Tasks</span>
+            <span className="profile-cta-sub">Find eco tasks near you</span>
           </div>
-          <span className="text-green-200">→</span>
+          <span className="profile-cta-arrow">→</span>
         </Link>
 
-        
-      </div>
+        <Link
+  href="/transactions"
+  className="flex items-center justify-between w-full px-5 py-4
+             rounded-2xl bg-white border border-gray-100 text-gray-900
+             font-semibold hover:border-green-300 hover:bg-green-50
+             transition-colors shadow-sm"
+>
+  <div className="flex items-center gap-3">
+    <span className="text-xl">💳</span>
+    <div className="text-left">
+      <p className="font-semibold">Transaction History</p>
+      <p className="text-xs text-gray-400 font-normal">
+        View your transactions
+      </p>
+    </div>
+  </div>
+  <span className="text-gray-300">→</span>
+</Link>
 
+        
+
+      </div>
     </div>
   )
 }

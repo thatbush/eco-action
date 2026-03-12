@@ -90,10 +90,12 @@ export default function RegisterOrganizationPage() {
   }
 
   return (
-    <div className="hero-section">
+    <div >
 
-          <div className="mb-8">
-          <h1 className="hero-title" style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)', marginBottom: '8px' }}>Register your organisation</h1>
+          <div>
+          <h1 className="hero-title" style={{ fontSize: 'clamp(1.2rem, 3vw, 2.1rem)', marginBottom: '6px' }}>
+          Register your  <em> Organization</em>
+        </h1>
           <p className="hero-subtitle">
             Submit your details for admin review. You'll be notified once verified.
           </p>

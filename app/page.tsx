@@ -37,7 +37,7 @@ export default function Home() {
         {/* CTA */}
         <div className="hero-cta-row">
           <button
-            className="hero-btn-primary"
+            className="btn-primary"
             onClick={() => router.push('/register')}
           >
             Start Your Journey

@@ -9,7 +9,8 @@ export default function LoginPage() {
   const [state, formAction, pending] = useActionState(login, initialState)
 
   return (
-<div style={{ position: 'relative', minHeight: '100vh', overflow: 'hidden' }}>
+<div>
+  <div>
 
     {/* Background video */}
     <video
@@ -32,11 +33,11 @@ export default function LoginPage() {
     <div style={{
       position: 'fixed',
       inset: 0,
-      background: 'rgba(121, 189, 133, 0.71)',
+      background: 'rgba(82, 183, 136, 0.2)',
       zIndex: 1,
     }} />
 
-    <div className="hero-section">
+    <div className="hero-section" style={{ paddingTop: '0px' }}>
   
         <h1 className="hero-title" style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)', marginBottom: '8px' }}>
           Login To Your Account<br />
@@ -58,6 +59,7 @@ export default function LoginPage() {
               name="email"
               type="email"
               className="input"
+              placeholder="username@email.com"
             />
             {state.errors?.email && (
               <p className="text-xs text-red-500 mt-1">{state.errors.email[0]}</p>
@@ -72,6 +74,7 @@ export default function LoginPage() {
               name="password"
               type="password"
               className="input"
+              placeholder="security key"
             />
             {state.errors?.password && (
               <p className="text-xs text-red-500 mt-1">{state.errors.password[0]}</p>
@@ -87,6 +90,7 @@ export default function LoginPage() {
           </button>
         </form>
       
+    </div>
     </div>
     </div>
   )

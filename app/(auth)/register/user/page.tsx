@@ -75,8 +75,8 @@ export default function UserRegisterPage() {
   }
 
   return (
-    <div className="hero-root w-full hero-section">
-      <div>
+    <div >
+      <div >
         <div>
           <h1 className="hero-title" style={{ fontSize: 'clamp(1.6rem, 3vw, 3.0rem)', marginBottom: '6px' }}>Create your account</h1>
         </div>
@@ -99,7 +99,7 @@ export default function UserRegisterPage() {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="input-label">
             Display Name
           </label>
           <input
@@ -115,7 +115,7 @@ export default function UserRegisterPage() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="input-label">
             Email
           </label>
           <input
@@ -131,7 +131,7 @@ export default function UserRegisterPage() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="input-label">
             Password
           </label>
           <input

@@ -7,17 +7,18 @@ import { useRouter } from "next/navigation";
 export const Navbar: React.FC = () => {
     const router = useRouter();
     return (
-        <nav className="w-full pb-16">
+        <nav className="w-full">
             <header className="hero-header">
                 
-                <div className="flex items-center hero-logo hover:cursor-pointer">
+                <div className="flex items-center logo hover:cursor-pointer"
+                onClick={() => router.push('/')}>
                     <Image src="/nobglogo2.png" alt="GreenSteps Logo" width={100} height={100} />
                 </div>
                 <div className="flex gap-4">
-                <button className="hero-btn-ghost" onClick={() => router.push('/register')}>
+                <button className="btn-ghost" onClick={() => router.push('/register')}>
                     Sign up
                 </button>
-                <button className="hero-btn-ghost" onClick={() => router.push('/login')}>
+                <button className="btn-ghost" onClick={() => router.push('/login')}>
                     login
                 </button>
                 </div>
