@@ -17,10 +17,20 @@
     --green-bright: #52b788;
     --green-light: #95d5b2;
 
+    /* FIX: hero-green-* aliases were referenced throughout but never defined.
+       Mapping them to the canonical green tokens so nothing breaks. */
+    --hero-green-deep: var(--green-deep);
+    --hero-green-mid: var(--green-mid);
+    --hero-green-bright: var(--green-bright);
+    --hero-green-light: var(--green-light);
+
     /* ── Neutrals / Cream ── */
     --cream: #f8f4ee;
     --cream-dark: #f0ebe2;
     --cream-border: rgba(82, 183, 136, 0.2);
+
+    /* FIX: hero-cream was referenced in profile page but not defined */
+    --hero-cream: var(--cream);
 
     /* ── Earthy accents ── */
     --gold: #c9a84c;
@@ -31,6 +41,8 @@
     --color-bg: var(--cream);
     --color-bg-surface: rgba(255, 255, 255, 0.92);
     --color-bg-muted: var(--cream-dark);
+    --color-bg-subtle: var(--cream-dark);
+    /* FIX: was referenced but missing */
     --color-text: #111827;
     --color-text-muted: #6b7280;
     --color-text-subtle: #9ca3af;
@@ -40,6 +52,11 @@
     --color-earth: var(--green-bright);
     --color-danger: var(--terracotta);
     --color-primary-hover: var(--bark);
+    --color-primary-light: rgba(82, 183, 136, 0.12);
+    /* FIX: referenced in badge-green but missing */
+
+    /* ── Navbar height — single source of truth ── */
+    --navbar-h: 72px;
 
     /* ── Radius scale ── */
     --radius-sm: 0.25rem;
@@ -102,9 +119,11 @@
     font-size: 1.125rem;
   }
 
+  /* FIX: removed margin + font-weight:600 from p — was making every paragraph
+     bold with unwanted margin, breaking form labels, card text, nav items, etc. */
   p {
-    margin: 1rem;
-    font-weight: 600;
+    margin: 0;
+    font-weight: 400;
   }
 
   button {
@@ -112,7 +131,6 @@
     background: none;
     cursor: pointer;
   }
-
 
   a {
     color: var(--color-primary);
@@ -126,7 +144,7 @@
 }
 
 
-/* ─── Annimations ─────────────────────────────────── */
+/* ─── Animations ─────────────────────────────────────────── */
 
 @layer base {
   @keyframes fadeUp {
@@ -170,11 +188,24 @@
       opacity: 0.25;
     }
   }
+
+  @keyframes heroFadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
 
 
 /* ─── Component Classes ─────────────────────────────────── */
 @layer components {
+
   .animate-fade-up {
     animation: fadeUp 0.8s ease-out forwards;
   }
@@ -200,27 +231,25 @@
     border: 2px solid var(--color-primary);
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s, transform 0.2s;
-
   }
 
   .btn-primary:hover:not(:disabled) {
     border-color: var(--color-danger);
     background-color: var(--color-danger);
-    transform: translateY(-5px);
+    transform: translateY(-2px);
   }
 
   .btn-ghost {
     background-color: transparent;
     border: 1.5px solid rgba(45, 106, 79, 0.35);
     color: black;
-    padding: 13px 28px;
+    padding: 10px 20px;
     cursor: pointer;
     transition: border-color 0.3s, color 0.3s, transform 0.2s;
   }
 
   .btn-ghost:hover:not(:disabled) {
-    background-color: transparent;
-    border-color: var(--hero-green-mid);
+    border-color: var(--green-mid);
     color: var(--color-text);
     transform: translateY(-2px);
   }
@@ -236,35 +265,98 @@
 
 
   /* ── Logo ── */
-
   .logo {
-    color: var(--hero-green-deep);
+    color: var(--green-deep);
     cursor: pointer;
-    transform: translateY(-2px);
+    transition: transform 0.2s ease;
   }
 
   .logo span {
-    color: var(--hero-green-bright);
-    transform: translateY(-2px);
+    color: var(--green-bright);
   }
 
   .logo:hover {
-    transform: translateY(-4px);
+    transform: translateY(-2px);
   }
 
   .logo:hover span {
-    color: var(--hero-green-deep);
-    transform: translateY(-4px);
+    color: var(--green-deep);
   }
 
-  /* ── Hero components ── */
+
+  /* ── Navbar / Hero header ── */
+  .hero-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    height: var(--navbar-h);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 48px;
+    backdrop-filter: blur(12px);
+    background-color: rgba(248, 244, 238, 0.88);
+    border-bottom: 1px solid rgba(82, 183, 136, 0.15);
+  }
+
+  @media (max-width: 768px) {
+    .hero-header {
+      padding: 0 16px;
+    }
+  }
+
+
+  /* ── Page layout helpers ── */
+
+  /* FIX: added page-content utility — clears fixed navbar, constrains width,
+     responsive horizontal padding. Use this on every page's root <div>
+     instead of ad-hoc pt-40 / mt-30 values. */
+  .page-content {
+    padding-top: calc(var(--navbar-h) + 2rem);
+    padding-bottom: 3rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    max-width: 64rem;
+    /* ~5xl */
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+  }
+
+  @media (min-width: 640px) {
+    .page-content {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .page-content {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+
+  /* Narrow variant for auth / profile pages */
+  .page-content-narrow {
+    padding-top: calc(var(--navbar-h) + 2rem);
+    padding-bottom: 3rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    max-width: 32rem;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+  }
+
+
+  /* ── Hero section (landing page only) ── */
   .hero-root {
     min-height: 80vh;
     overflow-x: hidden;
     position: relative;
-    justify-content: center;
-    align-items: center;
-    padding-top: 100px;
   }
 
   .hero-section {
@@ -272,36 +364,21 @@
     z-index: 1;
     min-height: 100vh;
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     padding-top: 100px;
   }
 
-  .hero-header {
-    /*used in nav*/
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 48px;
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(82, 183, 136, 0.15);
-  }
-
+  /* FIX: hero-title / hero-subtitle are LANDING PAGE styles (huge clamp font).
+     Don't reuse them on inner pages — use page-title / page-subtitle instead. */
   .hero-title {
     font-size: clamp(2.8rem, 6vw, 5.5rem);
     font-weight: 700;
     color: var(--green-deep);
-
     line-height: 1.05;
     letter-spacing: -1px;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
     animation: heroFadeUp 0.8s 0.15s ease both;
   }
 
@@ -319,6 +396,23 @@
     line-height: 1.7;
     animation: heroFadeUp 0.8s 0.3s ease both;
   }
+
+  /* Inner page heading scale */
+  .page-title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    color: var(--green-deep);
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+
+  .page-subtitle {
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+
 
   /* ── Form Inputs ── */
   .input {
@@ -353,53 +447,60 @@
     color: var(--color-danger);
   }
 
+
   /* ── Cards ── */
   .card {
-    @apply rounded-lg p-6 flex items-center justify-center text-center;
-    background-color: transparent;
-    color: black;
-    box-shadow: var(--shadow-sm);
-    transform: translateY(-2px);
+    @apply rounded-xl p-5;
+    background-color: white;
+    border: 1px solid var(--cream-border);
+    box-shadow: var(--shadow-card);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
   }
 
   .card:hover {
-    background-color: transparent;
-    color: black;
     box-shadow: var(--shadow-card-hover);
-    transform: translateY(-4px);
+    transform: translateY(-2px);
   }
 
   .card-strong {
-    @apply rounded-lg p-6 flex items-center justify-center text-center;
+    @apply rounded-xl p-5 block;
     background-color: var(--green-bright);
-    border: 1px solid var(--terracotta);
+    border: 1px solid transparent;
     color: white;
     box-shadow: var(--shadow-card);
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
   }
 
   .card-strong:hover:not(:disabled) {
-    background-color: var(--terracotta);
-    border: 1px solid var(--color-border-strong);
+    background-color: var(--green-mid);
     box-shadow: var(--shadow-card-hover);
-    transform: translateY(-4px);
+    transform: translateY(-2px);
     color: white;
   }
 
+  /* Stat card — a simple number + label block */
+  .stat-card {
+    @apply rounded-xl p-5;
+    background-color: white;
+    border: 1px solid var(--cream-border);
+    box-shadow: var(--shadow-card);
+  }
 
+  .stat-card-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--green-deep);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+  .stat-card-label {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+  }
 
 
   /* ── Badges ── */
@@ -422,7 +523,8 @@
     color: var(--color-danger);
   }
 
-  /* ── Containers ── */
+
+  /* ── Legacy containers (keep for compat, prefer page-content) ── */
   .container-page {
     @apply mx-auto w-full max-w-5xl px-4 py-8;
   }
@@ -438,38 +540,10 @@
   }
 
 
-  /* ── Animations ── */
-  @keyframes heroFadeUp {
-    from {
-      opacity: 0;
-      transform: translateY(24px);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-
-
-  /* Hero mobile */
-  @media (max-width: 768px) {
-    .hero-header {
-      padding: 16px 20px;
-      border-bottom: 1px solid rgba(82, 183, 136, 0.1);
-    }
-
-    .hero-steps-row {
-      gap: 12px;
-    }
-  }
-
   /* ════════════════════════════════════════════════════════
      ─── Profile Page
      ════════════════════════════════════════════════════════ */
 
-  /* Root — ambient blobs */
   .profile-page-root {
     min-height: 100vh;
     background-color: var(--hero-cream);
@@ -503,7 +577,6 @@
     z-index: 0;
   }
 
-  /* ── Hero banner ── */
   .profile-hero {
     position: relative;
     z-index: 1;
@@ -526,7 +599,6 @@
     pointer-events: none;
   }
 
-  /* Avatar */
   .profile-avatar-ring {
     width: 88px;
     height: 88px;
@@ -554,7 +626,6 @@
     letter-spacing: -1px;
   }
 
-  /* Name */
   .profile-name {
     font-family: 'Playfair Display', Georgia, serif;
     font-size: clamp(1.8rem, 5vw, 2.8rem);
@@ -565,7 +636,6 @@
     animation: heroFadeUp 0.7s 0.2s ease both;
   }
 
-  /* Tier badge */
   .profile-tier-badge {
     display: inline-flex;
     align-items: center;
@@ -580,7 +650,6 @@
     animation: heroFadeUp 0.7s 0.3s ease both;
   }
 
-  /* Tier moto */
   .profile-tier-moto {
     font-size: 0.82rem;
     font-style: italic;
@@ -591,7 +660,6 @@
     animation: heroFadeUp 0.7s 0.35s ease both;
   }
 
-  /* Member since */
   .profile-member-since {
     display: inline-flex;
     align-items: center;
@@ -610,7 +678,6 @@
     flex-shrink: 0;
   }
 
-  /* ── Content stack ── */
   .profile-content {
     position: relative;
     z-index: 1;
@@ -623,7 +690,6 @@
     animation: heroFadeUp 0.7s 0.45s ease both;
   }
 
-  /* ── Streak row ── */
   .profile-streak-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -631,13 +697,12 @@
   }
 
   .profile-streak-card {
-    background: rgba(255, 255, 255, 0.92);
+    background: transparent;
     backdrop-filter: blur(16px);
-    border-radius: 20px;
     padding: 20px 16px;
     text-align: center;
-    border: 1px solid rgba(82, 183, 136, 0.2);
     box-shadow: 0 4px 20px rgba(26, 58, 42, 0.08);
+    border-radius: var(--radius-2xl);
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   }
 
@@ -672,13 +737,9 @@
     font-weight: 500;
   }
 
-  /* ── Generic profile card ── */
   .profile-card {
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(16px);
-    border-radius: 20px;
+    background: transparent;
     padding: 20px;
-    border: 1px solid rgba(82, 183, 136, 0.15);
     box-shadow: 0 4px 20px rgba(26, 58, 42, 0.07);
   }
 
@@ -687,6 +748,7 @@
     align-items: center;
     gap: 8px;
     margin-bottom: 14px;
+    font-weight: 600;
   }
 
   .profile-card-icon {
@@ -711,7 +773,6 @@
     color: var(--hero-green-bright);
   }
 
-  /* Progress bar */
   .profile-progress-track {
     width: 100%;
     height: 8px;
@@ -736,7 +797,6 @@
     margin-bottom: 14px;
   }
 
-  /* Status chips */
   .profile-status-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -765,6 +825,12 @@
     border-color: rgba(239, 68, 68, 0.2);
   }
 
+  
+  .profile-status-chip.challenge {
+    background: rgba(239, 68, 68, 0.07);
+    border-color: rgba(239, 68, 68, 0.2);
+  }
+
   .profile-status-num {
     font-family: 'Playfair Display', Georgia, serif;
     font-size: 1.4rem;
@@ -785,6 +851,10 @@
     color: #dc2626;
   }
 
+   .profile-status-chip.challenge .profile-status-num {
+    color: rgb(80, 183, 211);
+  }
+
   .profile-status-lbl {
     font-size: 0.68rem;
     color: var(--color-text-muted);
@@ -793,8 +863,6 @@
     letter-spacing: 0.5px;
     margin: 0;
   }
-
-  /* ── CTA ── */
 
   .profile-cta-icon {
     font-size: 1.8rem;
@@ -828,12 +896,9 @@
     transition: transform 0.2s ease;
   }
 
-  /* ════════════════════════════════════════════════════════
-     ─── Profile Mobile — ≤ 640px
-     ════════════════════════════════════════════════════════ */
-  @media (max-width: 640px) {
 
-    /* Hero */
+  /* ── Mobile: Profile ≤ 640px ── */
+  @media (max-width: 640px) {
     .profile-hero {
       padding: 32px 16px 24px;
     }
@@ -867,13 +932,11 @@
       font-size: 0.73rem;
     }
 
-    /* Content */
     .profile-content {
       padding: 0 12px 28px;
       gap: 10px;
     }
 
-    /* Streaks — keep side-by-side, shrink */
     .profile-streak-row {
       gap: 10px;
     }
@@ -897,7 +960,6 @@
       letter-spacing: 0.4px;
     }
 
-    /* Progress card */
     .profile-card {
       padding: 14px;
       border-radius: 16px;
@@ -929,7 +991,6 @@
       gap: 6px;
     }
 
-    /* CTA */
     .profile-cta-icon {
       font-size: 1.5rem;
     }
@@ -943,7 +1004,7 @@
     }
   }
 
-  /* ─── Very small phones — ≤ 380px ─── */
+  /* ── Very small phones ≤ 380px ── */
   @media (max-width: 380px) {
     .profile-hero {
       padding: 24px 12px 18px;
@@ -987,11 +1048,14 @@
       font-size: 1.3rem;
     }
   }
-}
 
-@media (max-width: 640px) {
-  .register-choice-card {
-    width: 100%;
-    padding: 24px 20px;
+
+  /* ── Auth / Register ── */
+  @media (max-width: 640px) {
+    .register-choice-card {
+      width: 100%;
+      padding: 24px 20px;
+    }
   }
+
 }

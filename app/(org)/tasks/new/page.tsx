@@ -13,19 +13,19 @@ const LocationPicker = dynamic(
 )
 
 const CATEGORIES = [
-  { value: 'tree_planting',     label: '🌳 Tree Planting' },
-  { value: 'waste_collection',  label: '🗑️ Waste Collection' },
-  { value: 'recycling',         label: '♻️ Recycling' },
-  { value: 'clean_energy',      label: '⚡ Clean Energy' },
-  { value: 'water_conservation',label: '💧 Water Conservation' },
-  { value: 'other',             label: '🌿 Other' },
+  { value: 'tree_planting',     label: ' Tree Planting' },
+  { value: 'waste_collection',  label: ' Waste Collection' },
+  { value: 'recycling',         label: ' Recycling' },
+  { value: 'clean_energy',      label: ' Clean Energy' },
+  { value: 'water_conservation',label: ' Water Conservation' },
+  { value: 'other',             label: ' Other' },
 ]
 
 const PROOF_TYPES = [
-  { value: 'photo',       label: '📷 Photo Upload' },
-  { value: 'gps_checkin', label: '📍 GPS Check-in' },
-  { value: 'qr_scan',     label: '🔲 QR Scan' },
-  { value: 'receipt',     label: '🧾 Receipt' },
+  { value: 'photo',       label: ' Photo Upload' },
+  { value: 'gps_checkin', label: ' GPS Check-in' },
+  { value: 'qr_scan',     label: ' QR Scan for attendance' },
+  { value: 'receipt',     label: ' Receipt' },
 ]
 
 const STEPS = ['Basic Info', 'Proof & Location', 'Rewards', 'Preview']
@@ -118,7 +118,7 @@ export default function NewTaskPage() {
         return
       }
 
-      router.push('/orgdashboard/tasks')
+      router.push('/overview')
     } catch (e) {
       setError('Something went wrong. Please try again.')
       setPending(false)
@@ -126,13 +126,10 @@ export default function NewTaskPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
+    <div className="hero-root pt-17">
 
       {/* Header */}
       <div className="mb-8">
-        <Link href="/orgdashboard" className="text-sm text-gray-500 hover:text-gray-700">
-          ← Back to Dashboard
-        </Link>
         <h1 className="text-2xl font-bold text-gray-900 mt-2">Create New Task</h1>
       </div>
 
@@ -401,7 +398,12 @@ export default function NewTaskPage() {
             {pending ? 'Publishing...' : 'Publish Task'}
           </button>
         )}
+
       </div>
+      
+        <Link href="/orgdashboard" className="text-sm mt-4 text-gray-500 hover:text-gray-700">
+          Back to Dashboard
+        </Link>
     </div>
   )
 }

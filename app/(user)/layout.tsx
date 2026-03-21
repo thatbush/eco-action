@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import {Navbar} from '@/components/navbar'
+import { Navbar } from '@/components/navbar'
 
 export default async function UserLayout({
     children,
@@ -13,9 +13,11 @@ export default async function UserLayout({
     if (!user) redirect("/login");
 
     return (
-        <div className="min-h-screen bg-white">
-            <Navbar/>
-            <main className="container mx-auto px-4 py-8">{children}</main>
+        <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg)' }}>
+            <Navbar />
+            <main className="page-content pt-[100px]">
+                {children}
+            </main>
         </div>
     );
 }

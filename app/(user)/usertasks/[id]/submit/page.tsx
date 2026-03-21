@@ -92,8 +92,7 @@ export default function SubmitProofPage() {
 
   if (success) {
     return (
-      <div className="max-w-md mx-auto px-4 py-16 text-center">
-        <div className="text-6xl mb-4">🎉</div>
+      <div className="max-w-md mx-auto px-4 py-16 mt-50 text-center">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">
           Proof Submitted!
         </h1>
@@ -106,14 +105,7 @@ export default function SubmitProofPage() {
   }
 
   return (
-    <div className="max-w-md mx-auto px-4 py-8">
-
-      <Link
-        href={`/usertasks/${taskId}`}
-        className="text-sm text-gray-500 hover:text-gray-700"
-      >
-        ← Back to Task
-      </Link>
+    <div className="max-w-md mx-auto mt-50 px-4 py-8">
 
       <div className="mt-6 space-y-6">
         <div>
@@ -198,6 +190,13 @@ export default function SubmitProofPage() {
             </span>
           ) : 'Submit Proof'}
         </button>
+
+        <Link
+        href={`/usertasks/${taskId}`}
+        className="text-sm text-gray-500 hover:text-gray-700"
+      >
+        Explore more Tasks
+      </Link>
       </div>
     </div>
   )

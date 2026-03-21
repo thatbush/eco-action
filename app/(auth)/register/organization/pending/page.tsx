@@ -1,10 +1,11 @@
 import Link from 'next/link'
 export default function OrgPendingPage() {
     return (
+        <div className="hero-section pt-10">
         <div className="card">
             <div>
                 <h1 className="hero-title" style={{ fontSize: 'clamp(1.6rem, 3vw, 3.0rem)', marginBottom: '6px' }}>
-                    Your registration is<em> Under Review</em>
+                    Your registration is Under Review
                 </h1>
                 <p className="hero-subtitle">
                    We reviewing your details and you will receive an email once a decision
@@ -25,6 +26,7 @@ export default function OrgPendingPage() {
                                 Back to sign in
                             </Link>
             </div>
+        </div>
         </div>
     )
 }

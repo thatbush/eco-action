@@ -38,9 +38,13 @@ export default async function OrgLayout({
   }
 
   return (
-    <>
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg)' }}>
       <Navbar />
-      {children}
-    </>
+      {/* FIX: added <main> wrapper with page-content — previously children
+          rendered with no wrapper at all, sitting flush under the fixed navbar */}
+      <main className="page-content">
+        {children}
+      </main>
+    </div>
   )
 }

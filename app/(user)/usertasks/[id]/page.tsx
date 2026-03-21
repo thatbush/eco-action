@@ -39,17 +39,13 @@ export default async function TaskDetailPage({
   )  
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
+    <div className="max-w-2xl mx-auto px-4 py-8"> 
 
-      <Link href="/usertasks" className="text-sm text-gray-500 hover:text-gray-700">
-        ← Back to Tasks
-      </Link>
-
-      <div className="mt-4 space-y-6">
+      <div className="mt-30 space-y-6">
 
         {/* Header */}
         <div>
-          <p className="text-sm text-green-600 font-medium mb-1">
+          <p className="hero-title" style={{ fontSize: '2.25rem' }}>
             {org?.org_name}
           </p>
           <h1 className="text-2xl font-bold text-gray-900">{task.title}</h1>
@@ -59,7 +55,7 @@ export default async function TaskDetailPage({
             </span>
             <span className={`text-sm font-medium
               ${daysLeft <= 2 ? 'text-red-500' : 'text-gray-400'}`}>
-              ⏰ {daysLeft} days left
+              Deadline: {daysLeft} days left
             </span>
           </div>
         </div>
@@ -122,6 +118,9 @@ export default async function TaskDetailPage({
             Accept & Submit Proof →
           </Link>
         )}
+        <Link href="/usertasks" className="text-sm text-gray-500 hover:text-gray-700">
+        Explore Page
+      </Link>
       </div>
     </div>
   )

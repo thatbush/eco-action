@@ -33,7 +33,7 @@ export default async function OrganizationsPage() {
   const rejected = organizations?.filter(o => o.verification_status === 'rejected') ?? []
 
   return (
-    <div className="space-y-8">
+    <div className="hero-root p-10">
 
       {/* Page header */}
       <div>

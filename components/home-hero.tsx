@@ -15,8 +15,8 @@ export function HomeHero() {
   }, [])
 
   return (
-    <section className="w-full hero-root hero-section">
-      <h1 className="hero-title">
+    <section className="hero-root hero-section items-center justify-center">
+      <h1 className="hero-title" >
         Every step you take<br />
         <em>heals the planet.</em>
       </h1>

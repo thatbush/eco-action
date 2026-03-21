@@ -59,8 +59,6 @@ export default function RegisterOrganizationPage() {
       return
     }
 
-    // Email confirmations disabled (dev) — session returned immediately
-    // Create profile + org rows via API route using admin client
     if (data.session && data.user) {
       const res = await fetch('/api/register-org', {
         method: 'POST',
@@ -90,120 +88,120 @@ export default function RegisterOrganizationPage() {
   }
 
   return (
-    <div >
+    <div className='hero-section pt-10' >
 
-          <div>
-          <h1 className="hero-title" style={{ fontSize: 'clamp(1.2rem, 3vw, 2.1rem)', marginBottom: '6px' }}>
+      <div>
+        <h1 className="hero-title" style={{ fontSize: 'clamp(1.2rem, 3vw, 2.1rem)', marginBottom: '6px' }}>
           Register your  <em> Organization</em>
         </h1>
-          <p className="hero-subtitle">
-            Submit your details for admin review. You'll be notified once verified.
-          </p>
+        <p className="hero-subtitle">
+          Submit your details for admin review. You'll be notified once verified.
+        </p>
+      </div>
+
+      {errors.general && (
+        <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200">
+          <p className="text-sm text-red-600">{errors.general}</p>
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div>
+          <label htmlFor="org_name" className="input-label">
+            Organisation name
+          </label>
+          <input
+            id="org_name"
+            name="org_name"
+            type="text"
+            placeholder="Green Earth Kenya"
+            className="input"
+          />
+          {errors.org_name && (
+            <p className="mt-1 text-xs text-red-500">{errors.org_name}</p>
+          )}
         </div>
 
-        {errors.general && (
-          <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200">
-            <p className="text-sm text-red-600">{errors.general}</p>
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label htmlFor="org_name" className="input-label">
-              Organisation name
-            </label>
-            <input
-              id="org_name"
-              name="org_name"
-              type="text"
-              placeholder="Green Earth Kenya"
-              className="input"
-            />
-            {errors.org_name && (
-              <p className="mt-1 text-xs text-red-500">{errors.org_name}</p>
-            )}
-          </div>
-
-          <div>
-            <label htmlFor="contact_email" className="input-label">
-              Contact email
-            </label>
-            <input
-              id="contact_email"
-              name="contact_email"
-              type="email"
-              placeholder="info@greenearth.co.ke"
-              className="input"
-            />
-            {errors.contact_email && (
-              <p className="mt-1 text-xs text-red-500">{errors.contact_email}</p>
-            )}
-          </div>
-
-          <div>
-            <label htmlFor="kra_pin" className="input-label">
-              KRA PIN
-            </label>
-            <input
-              id="kra_pin"
-              name="kra_pin"
-              type="text"
-              placeholder="A123456789Z"
-              maxLength={11}
-              className="input"
-            />
-            {errors.kra_pin && (
-              <p className="mt-1 text-xs text-red-500">{errors.kra_pin}</p>
-            )}
-          </div>
-
-          <div>
-            <label htmlFor="description" className="input-label">
-              Description{' '}
-              <span className="text-gray-400 font-normal">(optional)</span>
-            </label>
-            <textarea
-              id="description"
-              name="description"
-              rows={3}
-              placeholder="Explain briefly what your organization does and your sustainability initiatives."
-              className="input"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="password" className="input-label">
-              Password
-            </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              placeholder="Min. 8 characters"
-              className="input"
-            />
-            {errors.password && (
-              <p className="mt-1 text-xs text-red-500">{errors.password}</p>
-            )}
-          </div>
-
-          <button
-            type="submit"
-            disabled={pending}
-            className="w-full py-2.5 px-4 btn btn-ghost"
-          >
-            {pending ? 'Submitting...' : ' Create account'}
-          </button>
-        </form>
-
-        <div className="mt-6 text-center text-sm text-gray-500">
-          <p>
-            Already have an account?{' '}
-            <Link href="/login" className="text-green-600 font-medium hover:underline">
-              Sign in
-            </Link>
-          </p>
+        <div>
+          <label htmlFor="contact_email" className="input-label">
+            Contact email
+          </label>
+          <input
+            id="contact_email"
+            name="contact_email"
+            type="email"
+            placeholder="info@greenearth.co.ke"
+            className="input"
+          />
+          {errors.contact_email && (
+            <p className="mt-1 text-xs text-red-500">{errors.contact_email}</p>
+          )}
         </div>
+
+        <div>
+          <label htmlFor="kra_pin" className="input-label">
+            KRA PIN
+          </label>
+          <input
+            id="kra_pin"
+            name="kra_pin"
+            type="text"
+            placeholder="A123456789Z"
+            maxLength={11}
+            className="input"
+          />
+          {errors.kra_pin && (
+            <p className="mt-1 text-xs text-red-500">{errors.kra_pin}</p>
+          )}
+        </div>
+
+        <div>
+          <label htmlFor="description" className="input-label">
+            Description{' '}
+            <span className="text-gray-400 font-normal">(optional)</span>
+          </label>
+          <textarea
+            id="description"
+            name="description"
+            rows={3}
+            placeholder="Explain briefly what your organization does and your sustainability initiatives."
+            className="input"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="password" className="input-label">
+            Password
+          </label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            placeholder="Min. 8 characters"
+            className="input"
+          />
+          {errors.password && (
+            <p className="mt-1 text-xs text-red-500">{errors.password}</p>
+          )}
+        </div>
+
+        <button
+          type="submit"
+          disabled={pending}
+          className="w-full py-2.5 px-4 btn btn-ghost"
+        >
+          {pending ? 'Submitting...' : ' Create account'}
+        </button>
+      </form>
+
+      <div className="mt-6 text-center text-sm text-gray-500">
+        <p>
+          Already have an account?{' '}
+          <Link href="/login" className="text-green-600 font-medium hover:underline">
+            Sign in
+          </Link>
+        </p>
+      </div>
     </div>
   )
 }
